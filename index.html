@@ -51,8 +51,14 @@ h1{font-size:clamp(3.2rem,7vw,5.7rem);line-height:.96;letter-spacing:-.07em;marg
 <header class="top"><nav>
 <a class="brand" href="#home">ODD<span>//</span>HUB</a>
 <div class="links">
-<a href="#home" class="active">Home</a><a href="#arcade">Arcade</a><a href="#mystery">Mystery Files</a><a href="#trivia">Trivia Lab</a><a href="#challenge">Daily Challenges</a><a href="#oddities">Oddities</a><a href="#scoreboard">Scoreboard</a>
-</div>
+<a href="#home" class="active">Home</a>
+<a href="#gaming">Gaming Library</a>
+<a href="#arcade">Arcade</a>
+<a href="#mystery">Mystery Files</a>
+<a href="#trivia">Trivia Lab</a>
+<a href="#challenge">Daily Challenges</a>
+<a href="#oddities">Oddities</a>
+<a href="#scoreboard">Scoreboard</a></div>
 </nav></header>
 <main id="top">
 <div id="homePage">
@@ -67,7 +73,69 @@ h1{font-size:clamp(3.2rem,7vw,5.7rem);line-height:.96;letter-spacing:-.07em;marg
 <article class="tile"><div class="emoji">🏆</div><h3>Personal Scoreboard</h3><p>Track your points and progress on this device.</p><a class="play" href="#scoreboard">Check scores →</a></article>
 </div></section></div>
 
-<section class="section page-hidden" id="arcade"><div class="page-heading"><div class="eyebrow">Quick games · No downloads</div><h2>Mini arcade.</h2><p class="muted">Short rounds. Friendly competition. Your score adds to your Odd Points.</p></div><div class="layout">
+
+<section class="section page-hidden" id="gaming">
+  <div class="page-heading">
+    <div class="eyebrow">Welcome to the game zone</div>
+    <h2>Gaming Library.</h2>
+    <p class="muted">Discover your next favorite game. Explore, compete, and have fun.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Find your next game</h3>
+    <input id="gameSearch" type="search" placeholder="Search games..." style="width:100%;max-width:400px;padding:12px;border-radius:10px;background:#152238;color:white;border:1px solid #405879;">
+  </div>
+
+  <div class="head" style="margin-top:25px">
+    <div class="eyebrow">Explore the collection</div>
+    <h2>Featured Games</h2>
+  </div>
+
+  <div class="grid" id="gameLibrary">
+    <article class="tile" data-game="rock paper scissors" data-category="arcade">
+      <div class="emoji">✊</div>
+      <h3>Rock, Paper, Scissors</h3>
+      <p>Challenge the Odd Hub and claim victory.</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+
+    <article class="tile" data-game="number hunt" data-category="puzzle">
+      <div class="emoji">🔢</div>
+      <h3>Number Hunt</h3>
+      <p>Can you find the hidden number?</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+
+    <article class="tile" data-game="reaction test" data-category="skill">
+      <div class="emoji">⚡</div>
+      <h3>Reaction Test</h3>
+      <p>Test your speed and reaction time.</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+
+    <article class="tile" data-game="word scramble" data-category="puzzle">
+      <div class="emoji">🔤</div>
+      <h3>Word Scramble</h3>
+      <p>Unscramble the mystery word.</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+
+    <article class="tile" data-game="odd one out" data-category="puzzle">
+      <div class="emoji">🕵️</div>
+      <h3>Odd One Out</h3>
+      <p>Find what doesn't belong.</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+
+    <article class="tile" data-game="memory match" data-category="memory">
+      <div class="emoji">🧩</div>
+      <h3>Memory Match</h3>
+      <p>Match the pairs and test your memory.</p>
+      <a class="play" href="#arcade">Play now →</a>
+    </article>
+  </div>
+</section>
+  <section class="section page-hidden" id="arcade"><div class="page-heading"><div class="eyebrow">Quick games · No downloads</div><h2>Mini arcade.</h2><p class="muted">Short rounds. Friendly competition. Your score adds to your Odd Points.</p></div><div class="layout">
 <div class="panel"><h3>✊ Rock, Paper, Scissors</h3><p class="muted">Can you beat the hub? First to five wins the bragging rights.</p><div class="row"><button class="play" onclick="rps('rock')">✊ Rock</button><button class="play" onclick="rps('paper')">✋ Paper</button><button class="play" onclick="rps('scissors')">✌️ Scissors</button></div><div class="result" id="rpsResult">Choose your move.</div><p class="muted" id="rpsScore">You 0 — Hub 0</p></div>
 <div class="panel"><h3>🔢 Number Hunt</h3><p class="muted">I'm thinking of a number from 1 to 20. Guess it in five tries.</p><div class="gamebox"><input id="guess" type="number" min="1" max="20" placeholder="Your guess"><button class="play" onclick="guessNumber()">Guess</button><div class="result" id="guessResult">You have 5 tries.</div></div></div>
 <div class="panel"><h3>⚡ Reaction Test</h3><p class="muted">Wait for green, then click as fast as you can.</p><div class="gamebox"><button class="play" id="react" onclick="startReaction()">Start test</button><div class="result" id="reactResult">Ready when you are.</div></div></div>
@@ -216,7 +284,7 @@ facts.forEach((f,i)=>{let b=document.createElement('button');b.className='tile';
 function resetAll(){if(!confirm('Reset the scores saved on this device?'))return;pts=games=solves=0;caseDone=false;['oddPoints','oddGames','oddSolves','oddCase'].forEach(k=>localStorage.removeItem(k));update();document.getElementById('mysteryResult').textContent='Progress reset.'}
 function showPage(pageId){
  const home=document.getElementById('homePage');
- const pages=['arcade','mystery','trivia','challenge','oddities','scoreboard'];
+ const pages=['gaming','arcade','mystery','trivia','challenge','oddities','scoreboard'];
  if(pageId==='home'){home.classList.remove('page-hidden');pages.forEach(id=>document.getElementById(id).classList.add('page-hidden'))}
  else{home.classList.add('page-hidden');pages.forEach(id=>document.getElementById(id).classList.toggle('page-hidden',id!==pageId))}
  document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+pageId));
@@ -225,11 +293,19 @@ function showPage(pageId){
 document.addEventListener('click',function(e){
  const link=e.target.closest('a[href^="#"]');if(!link)return;
  const target=link.getAttribute('href').slice(1);
- const pageMap={top:'home',discover:'home',home:'home',arcade:'arcade',mystery:'mystery',trivia:'trivia',challenge:'challenge',oddities:'oddities',scoreboard:'scoreboard'};
+ const pageMap={top:'home',discover:'home',home:'home',gaming:'gaming',arcade:'arcade',mystery:'mystery',trivia:'trivia',challenge:'challenge',oddities:'oddities',scoreboard:'scoreboard'};
  if(pageMap[target]){e.preventDefault();showPage(pageMap[target]);history.replaceState(null,'','#'+(pageMap[target]==='home'?'home':pageMap[target]));}
 });
-const initial=location.hash.slice(1);const initialMap={arcade:'arcade',mystery:'mystery',trivia:'trivia',challenge:'challenge',oddities:'oddities',scoreboard:'scoreboard'};
+const initial=location.hash.slice(1);const initialMap={gaming:'gaming',arcade:'arcade',mystery:'mystery',trivia:'trivia',challenge:'challenge',oddities:'oddities',scoreboard:'scoreboard'};
 showPage(initialMap[initial]||'home');renderTrivia();update();
-</script>
+const gameSearch = document.getElementById('gameSearch');
+if (gameSearch) {
+  gameSearch.addEventListener('input', () => {
+    const query = gameSearch.value.trim().toLowerCase();
+    document.querySelectorAll('#gameLibrary .tile').forEach(card => {
+      card.style.display = card.dataset.game.includes(query) ? '' : 'none';
+    });
+  });
+}</script>
 </body>
 </html>
