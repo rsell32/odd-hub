@@ -86,7 +86,13 @@ h1{font-size:clamp(3.2rem,7vw,5.7rem);line-height:.96;letter-spacing:-.07em;marg
     <input id="gameSearch" type="search" placeholder="Search games..." style="width:100%;max-width:400px;padding:12px;border-radius:10px;background:#152238;color:white;border:1px solid #405879;">
   </div>
 
-  <div class="head" style="margin-top:25px">
+  <div class="row" id="gameFilters">
+  <button class="play" onclick="filterGames('all')">All Games</button>
+  <button class="play" onclick="filterGames('arcade')">Arcade</button>
+  <button class="play" onclick="filterGames('puzzle')">Puzzle</button>
+  <button class="play" onclick="filterGames('skill')">Skill</button>
+  <button class="play" onclick="filterGames('memory')">Memory</button>
+</div>  <div class="head" style="margin-top:25px">
     <div class="eyebrow">Explore the collection</div>
     <h2>Featured Games</h2>
   </div>
@@ -298,14 +304,30 @@ document.addEventListener('click',function(e){
 });
 const initial=location.hash.slice(1);const initialMap={gaming:'gaming',arcade:'arcade',mystery:'mystery',trivia:'trivia',challenge:'challenge',oddities:'oddities',scoreboard:'scoreboard'};
 showPage(initialMap[initial]||'home');renderTrivia();update();
-const gameSearch = document.getElementById('gameSearch');
-if (gameSearch) {
-  gameSearch.addEventListener('input', () => {
-    const query = gameSearch.value.trim().toLowerCase();
-    document.querySelectorAll('#gameLibrary .tile').forEach(card => {
-      card.style.display = card.dataset.game.includes(query) ? '' : 'none';
-    });
+let activeGameCategory = 'all';
+
+function applyGameFilters() {
+  const query = document.getElementById('gameSearch').value.trim().toLowerCase();
+
+  document.querySelectorAll('#gameLibrary .tile').forEach(card => {
+    const matchesSearch = card.dataset.game.includes(query);
+    const matchesCategory =
+      activeGameCategory === 'all' ||
+      card.dataset.category === activeGameCategory;
+
+    card.style.display = matchesSearch && matchesCategory ? '' : 'none';
   });
+}
+
+function filterGames(category) {
+  activeGameCategory = category;
+  applyGameFilters();
+}
+
+const gameSearch = document.getElementById('gameSearch');
+
+if (gameSearch) {
+  gameSearch.addEventListener('input', applyGameFilters);
 }</script>
 </body>
 </html>
