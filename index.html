@@ -69,7 +69,112 @@ h1{font-size:clamp(3.2rem,7vw,5.7rem);line-height:.96;letter-spacing:-.07em;marg
 <div class="panel"><h3>✊ Rock, Paper, Scissors</h3><p class="muted">Can you beat the hub? First to five wins the bragging rights.</p><div class="row"><button class="play" onclick="rps('rock')">✊ Rock</button><button class="play" onclick="rps('paper')">✋ Paper</button><button class="play" onclick="rps('scissors')">✌️ Scissors</button></div><div class="result" id="rpsResult">Choose your move.</div><p class="muted" id="rpsScore">You 0 — Hub 0</p></div>
 <div class="panel"><h3>🔢 Number Hunt</h3><p class="muted">I'm thinking of a number from 1 to 20. Guess it in five tries.</p><div class="gamebox"><input id="guess" type="number" min="1" max="20" placeholder="Your guess"><button class="play" onclick="guessNumber()">Guess</button><div class="result" id="guessResult">You have 5 tries.</div></div></div>
 <div class="panel"><h3>⚡ Reaction Test</h3><p class="muted">Wait for green, then click as fast as you can.</p><div class="gamebox"><button class="play" id="react" onclick="startReaction()">Start test</button><div class="result" id="reactResult">Ready when you are.</div></div></div>
-<div class="panel"><h3>🧩 Memory Match</h3><p class="muted">Find all matching pairs. Tap two cards at a time.</p><div class="gamebox"><button class="play" onclick="startMemory()">Start / restart</button><div class="memory" id="memory"></div><div class="result" id="memoryResult"></div></div></div></div></section>
+
+<div class="panel">
+  <h3>🔤 Word Scramble</h3>
+  <p class="muted">Unscramble the mystery word!</p>
+  <div class="gamebox">
+    <div class="result" id="scrambleWord">Press start to play.</div>
+    <button class="play" onclick="startScramble()">New word</button>
+    <input id="scrambleGuess" type="text" placeholder="Your answer">
+    <button class="play" onclick="checkScramble()">Check answer</button>
+    <div class="result" id="scrambleResult"></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>🕵️ Odd One Out</h3>
+  <p class="muted">Find the item that doesn't belong!</p>
+  <div class="gamebox">
+    <div class="result" id="oddQuestion">Press start to play.</div>
+    <div id="oddChoices"></div>
+    <button class="play" onclick="startOdd()">New round</button>
+    <div class="result" id="oddResult"></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>📈 Higher or Lower</h3>
+  <p class="muted">Will the next number be higher or lower?</p>
+  <div class="gamebox">
+    <div class="result" id="higherNumber">Press start to play.</div>
+    <button class="play" onclick="guessHigher()">Higher</button>
+    <button class="play" onclick="guessLower()">Lower</button>
+    <button class="play" onclick="startHigherLower()">New game</button>
+    <div class="result" id="higherResult"></div>
+    <div class="result" id="higherScore">Score: 0</div>
+  </div>
+</div>
+ <div class="panel"><h3>🧩 Memory Match</h3><p class="muted">Find all matching pairs. Tap two cards at a time.</p><div class="gamebox"><button class="play" onclick="startMemory()">Start / restart</button><div class="memory" id="memory"></div><div class="result" id="memoryResult"></div></div></div></div>
+
+const scrambleWords = ["PLANET", "MYSTERY", "PUZZLE", "GALAXY", "ROCKET", "SHADOW", "ODDITY"];
+let currentScramble = "";
+
+function startScramble() {
+  currentScramble = scrambleWords[Math.floor(Math.random() * scrambleWords.length)];
+  let mixed = currentScramble.split("");
+  do {
+    mixed.sort(() => Math.random() - 0.5);
+  } while (mixed.join("") === currentScramble && currentScramble.length > 1);
+
+  document.getElementById("scrambleWord").textContent = mixed.join(" ");
+  document.getElementById("scrambleGuess").value = "";
+  document.getElementById("scrambleResult").textContent = "";
+}
+
+function checkScramble() {
+  const guess = document.getElementById("scrambleGuess").value.trim().toUpperCase();
+  document.getElementById("scrambleResult").textContent =
+    guess === currentScramble ? "Correct! Nice work!" : "Not quite. Try again!";
+}
+
+const oddRounds = [
+  { q: "Which one is not a planet?", a: ["Mars", "Venus", "Moon", "Jupiter"], correct: "Moon" },
+  { q: "Which one is not a mammal?", a: ["Dog", "Whale", "Eagle", "Cat"], correct: "Eagle" },
+  { q: "Which one is not a color?", a: ["Blue", "Green", "Seven", "Red"], correct: "Seven" },
+  { q: "Which one is not a season?", a: ["Winter", "Summer", "Tuesday", "Spring"], correct: "Tuesday" }
+];
+
+function startOdd() {
+  const round = oddRounds[Math.floor(Math.random() * oddRounds.length)];
+  document.getElementById("oddQuestion").textContent = round.q;
+  document.getElementById("oddChoices").innerHTML = round.a.map(item =>
+    `<button class="play" onclick="checkOdd('${item}','${round.correct}')">${item}</button>`
+  ).join(" ");
+  document.getElementById("oddResult").textContent = "";
+}
+
+function checkOdd(choice, correct) {
+  document.getElementById("oddResult").textContent =
+    choice === correct ? "Correct! You found it!" : "Not quite. Try again!";
+}
+
+let higherCurrent = 0;
+let higherScoreValue = 0;
+
+function startHigherLower() {
+  higherCurrent = Math.floor(Math.random() * 20) + 1;
+  higherScoreValue = 0;
+  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
+  document.getElementById("higherScore").textContent = "Score: 0";
+  document.getElementById("higherResult").textContent = "";
+}
+
+function makeHigherGuess(direction) {
+  const next = Math.floor(Math.random() * 20) + 1;
+  const correct = direction === "higher" ? next > higherCurrent : next < higherCurrent;
+  document.getElementById("higherResult").textContent =
+    next + " — " + (correct ? "Correct!" : "Not quite!");
+  if (correct) higherScoreValue++;
+  else higherScoreValue = 0;
+  higherCurrent = next;
+  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
+  document.getElementById("higherScore").textContent = "Score: " + higherScoreValue;
+}
+
+function guessHigher() { makeHigherGuess("higher"); }
+function guessLower() { makeHigherGuess("lower"); }
+/section>
 
 <section class="section page-hidden" id="mystery"><div class="page-heading"><div class="eyebrow">Case file 001 · Fictional mystery</div><h2>The midnight transmission.</h2><p class="muted">A message was intercepted at 00:03. The sender left a short code and one clue.</p></div><div class="panel"><h3>📡 Decode the message</h3><p class="muted">Every letter has moved one step forward. Move each letter back one step to reveal the two-word message.</p><div class="gamebox"><div style="font-size:1.5rem;letter-spacing:5px;font-weight:900;color:var(--cyan)">UIF EPPS</div><input id="answer" placeholder="Your decoded message"><button class="play" onclick="checkMystery()">Submit answer</button><div class="result" id="mysteryResult"></div></div></div></section>
 
