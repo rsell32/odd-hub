@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ODD//HUB — Explore the Unexpected</title>
+<style>
+:root{--bg:#080b12;--panel:#111827;--panel2:#172033;--ink:#f3f6ff;--muted:#aab5ca;--lime:#c8ff5a;--cyan:#66e5ff;--pink:#ff7eb6;--line:#29354a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#182641 0,transparent 35%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:10;background:#080b12eF;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.nav{max-width:1200px;margin:auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:1000;letter-spacing:-1.5px;font-size:1.35rem}.brand b{color:var(--lime)}.navlinks{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}.navlinks a:hover{color:var(--lime)}
+.wrap{max-width:1200px;margin:auto;padding:0 24px}.hero{padding:76px 0 54px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.eyebrow{color:var(--lime);font-size:.76rem;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:clamp(3.4rem,8vw,7rem);letter-spacing:-.075em;line-height:.88;margin:18px 0}h1 span{color:var(--lime)}
+.lead{font-size:1.12rem;line-height:1.65;color:var(--muted);max-width:620px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 19px;border-radius:12px;border:1px solid var(--line);font-weight:850;background:var(--panel2);color:var(--ink)}.btn.primary{background:var(--lime);color:#11180a;border-color:var(--lime)}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.portal{border:1px solid #40516d;background:linear-gradient(145deg,#18263d,#0e1421);border-radius:26px;padding:24px;min-height:300px;position:relative;overflow:hidden;box-shadow:0 25px 80px #0006}
+.orbit{position:absolute;width:240px;height:240px;border:1px solid #7eeeff55;border-radius:50%;right:-40px;top:20px;box-shadow:0 0 55px #66e5ff18,inset 0 0 55px #66e5ff12}.orbit:before,.orbit:after{content:"";position:absolute;border:1px solid #c8ff5a66;border-radius:50%;inset:28px;transform:rotate(35deg) scaleX(1.5)}.orbit:after{inset:65px;transform:rotate(-35deg) scaleX(1.6)}
+.portal-content{position:relative;z-index:1}.portal .big{font-size:4.5rem;margin:22px 0 12px}.status{font-size:.8rem;color:var(--lime);font-weight:900;letter-spacing:1px}.portal p{color:var(--muted);max-width:280px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 55px}.stat{background:#111827b8;border:1px solid var(--line);padding:17px;border-radius:15px}.stat strong{font-size:1.5rem;display:block}.stat span{font-size:.8rem;color:var(--muted)}
+section{padding:34px 0 54px;scroll-margin-top:80px}.sectiontop{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:22px}.sectiontop h2{font-size:2.25rem;letter-spacing:-.06em;margin:8px 0}.sectiontop p{color:var(--muted);margin:0;max-width:480px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.tile{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:22px;min-height:205px;display:flex;flex-direction:column;align-items:flex-start;transition:.2s}.tile:hover{border-color:#7184a4;transform:translateY(-3px)}.emoji{font-size:2rem}.tile h3{font-size:1.25rem;margin:15px 0 7px}.tile p{color:var(--muted);line-height:1.5;margin:0 0 18px}.tile .mini{margin-top:auto;color:var(--lime);font-size:.85rem;font-weight:900}
+.feature{background:linear-gradient(135deg,#1b2940,#111827);border:1px solid var(--line);border-radius:24px;padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.panel{background:#090e18;border:1px solid var(--line);border-radius:18px;padding:20px}.panel h3{margin:0 0 8px}.muted{color:var(--muted);line-height:1.5}
+input,select{background:#090e18;color:var(--ink);border:1px solid #3b4b65;border-radius:10px;padding:12px;width:100%;margin:7px 0 12px}
+.result{margin-top:12px;padding:13px;background:#1a2638;border-radius:10px;color:var(--cyan);min-height:45px;line-height:1.5}
+.puzzlecode{font:900 1.5rem ui-monospace,monospace;letter-spacing:5px;color:var(--lime);padding:12px 0}
+.answerrow{display:flex;gap:8px}.answerrow input{margin:0}.answerrow button{white-space:nowrap}
+.gamearea{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.choice{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.choice button{font-size:1.6rem;padding:15px;background:#1b2940;border:1px solid var(--line);border-radius:12px}
+.trivia-options{display:grid;gap:8px;margin-top:14px}.trivia-options button{text-align:left}
+.scoreline{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem;margin-top:12px}
+footer{border-top:1px solid var(--line);padding:30px 0 45px;color:var(--muted);font-size:.88rem}
+.tag{display:inline-block;border:1px solid #4a5d79;border-radius:99px;padding:5px 9px;font-size:.72rem;color:var(--cyan);font-weight:900}
+@media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:52px}.grid{grid-template-columns:repeat(2,1fr)}.feature,.gamearea{grid-template-columns:1fr}.stats{margin-bottom:30px}}
+@media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.navlinks{gap:13px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.sectiontop{display:block}.wrap{padding:0 17px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><a class="brand" href="#">ODD<span style="color:var(--cyan)">//</span><b>HUB</b></a><nav class="navlinks"><a href="#discover">Discover</a><a href="#mystery">Mystery</a><a href="#arcade">Arcade</a><a href="#trivia">Trivia</a><a href="#challenge">Challenge</a></nav></div></header>
+<main class="wrap">
+<section class="hero" id="top">
+ <div><div class="eyebrow">A playground for curious people</div><h1>THE WEB'S<br><span>WEIRD</span> SIDE.</h1><p class="lead">One giant place for mysteries, mini-games, strange facts, brain teasers, and challenges. Pick a portal. Follow a rabbit hole. See where you end up.</p><div class="actions"><a class="btn primary" href="#discover">Explore the hub ↘</a><a class="btn" href="#mystery">Open the mystery</a></div></div>
+ <aside class="portal"><div class="orbit"></div><div class="portal-content"><div class="status">● ALL SYSTEMS CURIOUS</div><div class="big">🌀</div><div class="tag">TODAY'S TRANSMISSION</div><h2 style="font-size:1.8rem;margin:12px 0">You've found the entrance.</h2><p>Nothing here is quite what it seems. The next click is yours.</p></div></aside>
+</section>
+<div class="stats"><div class="stat"><strong id="visited">01</strong><span>PORTALS EXPLORED</span></div><div class="stat"><strong id="points">000</strong><span>ODD POINTS</span></div><div class="stat"><strong>∞</strong><span>WAYS TO WASTE TIME</span></div></div>
+
+<section id="discover"><div class="sectiontop"><div><div class="eyebrow">Choose your rabbit hole</div><h2>What's your next move?</h2></div><p>Different corners of the internet, all under one roof. Start anywhere.</p></div>
+<div class="grid">
+<a class="tile" href="#mystery" onclick="visit()"><div class="emoji">🕵️</div><h3>The Mystery Files</h3><p>Decode a strange transmission and unlock the hidden phrase.</p><div class="mini">INVESTIGATE →</div></a>
+<a class="tile" href="#arcade" onclick="visit()"><div class="emoji">🕹️</div><h3>Mini Arcade</h3><p>Play quick games and see if you can beat your own score.</p><div class="mini">PLAY NOW →</div></a>
+<a class="tile" href="#trivia" onclick="visit()"><div class="emoji">🧠</div><h3>Trivia Lab</h3><p>Test your knowledge with questions from all over the place.</p><div class="mini">TEST YOUR BRAIN →</div></a>
+<a class="tile" href="#challenge" onclick="visit()"><div class="emoji">⚡</div><h3>Daily Challenge</h3><p>Get a random mission. Some are easy. Some are oddly specific.</p><div class="mini">GET A MISSION →</div></a>
+<a class="tile" href="#oddities" onclick="visit()"><div class="emoji">👽</div><h3>Oddities Archive</h3><p>A collection of strange facts and fun little rabbit holes.</p><div class="mini">GET WEIRD →</div></a>
+<a class="tile" href="#leaderboard" onclick="visit()"><div class="emoji">🏆</div><h3>Hall of Curious</h3><p>Track your points during this visit and try to top your score.</p><div class="mini">CHECK YOUR RANK →</div></a>
+</div></section>
+
+<section id="mystery"><div class="sectiontop"><div><div class="eyebrow">Case file 001 · fictional mystery</div><h2>The midnight transmission.</h2></div><span class="tag">PUZZLE ACTIVE</span></div>
+<div class="feature"><div><h3>A message was intercepted at 00:03.</h3><p class="muted">The sender left a short code and one clue: “Every letter has moved one step forward. Move it back to read what I wrote.”</p><div class="puzzlecode">UIF EPPS</div><p class="muted">Hint: A becomes Z when you move one letter backward.</p></div>
+<div class="panel"><h3>Decode the message</h3><p class="muted">Enter the two-word message in lowercase or uppercase.</p><div class="answerrow"><input id="mysteryAnswer" placeholder="Your decoded message"><button class="btn primary" onclick="checkMystery()">Submit</button></div><div class="result" id="mysteryResult">The file is waiting for your answer.</div></div></div></section>
+
+<section id="arcade"><div class="sectiontop"><div><div class="eyebrow">Quick games</div><h2>Mini arcade.</h2></div><p>Short rounds. No downloads. Your score adds to your Odd Points.</p></div>
+<div class="gamearea">
+<div class="panel"><h3>✊ Rock, Paper, Scissors</h3><p class="muted">Can you beat the hub? First to five wins the bragging rights.</p><div class="choice"><button onclick="rps('rock')" aria-label="Rock">✊</button><button onclick="rps('paper')" aria-label="Paper">✋</button><button onclick="rps('scissors')" aria-label="Scissors">✌️</button></div><div class="result" id="rpsResult">Choose your move.</div><div class="scoreline"><span>You: <b id="youScore">0</b></span><span>Hub: <b id="hubScore">0</b></span><button class="btn" onclick="resetRps()">Reset</button></div></div>
+<div class="panel"><h3>🎯 Number hunt</h3><p class="muted">I'm thinking of a number from 1 to 20. Guess it in as few tries as possible.</p><div class="answerrow"><input id="guess" type="number" min="1" max="20" placeholder="1–20"><button class="btn primary" onclick="guessNumber()">Guess</button></div><div class="result" id="guessResult">A new number is ready.</div><div class="scoreline"><span>Attempts: <b id="attempts">0</b></span><button class="btn" onclick="newNumber()">New round</button></div></div>
+</div></section>
+
+<section id="trivia"><div class="sectiontop"><div><div class="eyebrow">Trivia lab</div><h2>One question. Four options.</h2></div><span class="tag">KNOWLEDGE CHECK</span></div>
+<div class="panel"><div class="scoreline"><span id="qCount">QUESTION 1 / 5</span><span>Correct: <b id="triviaScore">0</b></span></div><h3 id="question" style="font-size:1.35rem;margin-top:22px">Which planet has the most moons currently confirmed?</h3><div class="trivia-options" id="options"></div><div class="result" id="triviaResult">Pick an answer to lock it in.</div><button class="btn primary" id="nextQuestion" style="margin-top:14px" onclick="nextTrivia()" disabled>Next question →</button></div></section>
+
+<section id="challenge"><div class="sectiontop"><div><div class="eyebrow">Your mission, should you accept it</div><h2>Daily challenge generator.</h2></div><span class="tag">RANDOM MISSION</span></div>
+<div class="feature"><div><div style="font-size:3.5rem">⚡</div><h3 id="missionTitle">The observation mission</h3><p class="muted" id="missionText">Find three things around you that are the same color, but used for completely different purposes.</p><button class="btn primary" onclick="newMission()">Give me another mission ↻</button></div><div class="panel"><h3>Mission rules</h3><p class="muted">These are offline-friendly, safe, real-world mini challenges. No posting personal information, no risky stunts, and no spending money required.</p><div class="result" id="missionStatus">Mission status: waiting for you.</div><button class="btn" onclick="completeMission()" style="margin-top:12px">I completed it +10</button></div></div></section>
+
+<section id="oddities"><div class="sectiontop"><div><div class="eyebrow">The oddities archive</div><h2>Strange, but true-ish.</h2></div><p>Tap a card to reveal a quick fact. The archive rotates through fun knowledge.</p></div>
+<div class="grid" id="facts"></div></section>
+<section id="leaderboard"><div class="sectiontop"><div><div class="eyebrow">Local score tracker</div><h2>Hall of curious.</h2></div><span class="tag">THIS SESSION</span></div>
+<div class="panel"><h3>Your current run</h3><p class="muted">Earn points by solving the mystery, playing games, answering trivia, and completing a mission. This demo leaderboard tracks your score in this browser session only; it is not a public online ranking.</p><div class="scoreline"><span>Explorer rank</span><strong id="rank" style="color:var(--lime)">NEW ARRIVAL</strong></div><div class="scoreline"><span>Total Odd Points</span><strong id="finalPoints">0</strong></div><div class="scoreline"><span>Portals visited</span><strong id="finalVisited">1</strong></div><button class="btn" onclick="resetAll()" style="margin-top:18px">Reset my run</button></div></section>
+<footer><div class="brand">ODD<span style="color:var(--cyan)">//</span><b>HUB</b></div><p>A playful demo universe made for exploring. Puzzles and characters are fictional; no accounts, purchases, or personal details needed.</p><small>© 2026 ODD//HUB · Keep being curious.</small></footer>
+</main>
+<script>
+let pts=0,visits=1,seen=new Set(['top']),rpsYou=0,rpsHub=0,secret=1,tries=0,doneMystery=false,missionDone=false;
+function update(){document.getElementById('points').textContent=String(pts).padStart(3,'0');document.getElementById('visited').textContent=String(visits).padStart(2,'0');document.getElementById('finalPoints').textContent=pts;document.getElementById('finalVisited').textContent=visits;document.getElementById('rank').textContent=pts>=50?'PUZZLE MASTER':pts>=25?'CURIOUS EXPLORER':pts>=10?'RABBIT-HOLE REGULAR':'NEW ARRIVAL'}
+function addPoints(n){pts+=n;update()}
+function visit(){let id=location.hash.slice(1);if(id&&!seen.has(id)){seen.add(id);visits++;update()}}
+window.addEventListener('hashchange',visit);
+function checkMystery(){let v=document.getElementById('mysteryAnswer').value.trim().toLowerCase();let out=document.getElementById('mysteryResult');if(v==='the door'){out.textContent='ACCESS GRANTED. The message says: THE DOOR. +15 Odd Points.';if(!doneMystery){addPoints(15);doneMystery=true}}else out.textContent='Not quite. Move every letter one step backward in the alphabet.'}
+function rps(move){let choices=['rock','paper','scissors'],hub=choices[Math.floor(Math.random()*3)],win=move===hub?'tie':(move==='rock'&&hub==='scissors'||move==='paper'&&hub==='rock'||move==='scissors'&&hub==='paper')?'win':'lose';let msg=win==='tie'?'Tie round.':win==='win'?'You win this round! +2 points.':'The hub wins this round.';document.getElementById('rpsResult').textContent='You chose '+move+'; hub chose '+hub+'. '+msg;if(win==='win'){rpsYou++;addPoints(2)}else if(win==='lose')rpsHub++;document.getElementById('youScore').textContent=rpsYou;document.getElementById('hubScore').textContent=rpsHub}
+function resetRps(){rpsYou=0;rpsHub=0;document.getElementById('youScore').textContent=0;document.getElementById('hubScore').textContent=0;document.getElementById('rpsResult').textContent='Fresh round. Choose your move.'}
+function newNumber(){secret=Math.floor(Math.random()*20)+1;tries=0;document.getElementById('attempts').textContent=0;document.getElementById('guessResult').textContent='New number selected. Good luck.';document.getElementById('guess').value=''}
+function guessNumber(){let n=Number(document.getElementById('guess').value),out=document.getElementById('guessResult');if(!n||n<1||n>20){out.textContent='Enter a whole number from 1 to 20.';return}tries++;document.getElementById('attempts').textContent=tries;if(n===secret){out.textContent='You got it in '+tries+' tries! +5 points.';addPoints(5);newNumber()}else out.textContent=n<secret?'Too low. Try a higher number.':'Too high. Try a lower number.'}
+newNumber();
+const questions=[['Which planet is famous for its prominent ring system?',['Mars','Saturn','Venus','Mercury'],1],['What is the largest ocean on Earth?',['Atlantic','Indian','Arctic','Pacific'],3],['Which animal is a mammal that can truly fly?',['Penguin','Bat','Flying fish','Ostrich'],1],['How many sides does a hexagon have?',['Five','Six','Seven','Eight'],1],['Which instrument usually has 88 keys?',['Violin','Trumpet','Piano','Flute'],2]];
+let qi=0,ts=0,locked=false;
+function renderTrivia(){let q=questions[qi];document.getElementById('qCount').textContent='QUESTION '+(qi+1)+' / '+questions.length;document.getElementById('question').textContent=q[0];document.getElementById('options').innerHTML='';q[1].forEach((v,i)=>{let b=document.createElement('button');b.className='btn';b.textContent=String.fromCharCode(65+i)+'. '+v;b.onclick=()=>answerTrivia(i);document.getElementById('options').appendChild(b)});document.getElementById('triviaResult').textContent='Pick an answer to lock it in.';document.getElementById('nextQuestion').disabled=true;document.getElementById('nextQuestion').textContent=qi===questions.length-1?'Restart trivia ↻':'Next question →';locked=false}
+function answerTrivia(i){if(locked)return;locked=true;let correct=questions[qi][2],buttons=document.querySelectorAll('#options button');buttons.forEach((b,j)=>{b.disabled=true;if(j===correct)b.style.borderColor='var(--lime)'});if(i===correct){ts++;document.getElementById('triviaResult').textContent='Correct! Nice one. +3 points.';addPoints(3)}else document.getElementById('triviaResult').textContent='Not quite! The correct answer is '+questions[qi][1][correct]+'.';document.getElementById('triviaScore').textContent=ts;document.getElementById('nextQuestion').disabled=false}
+function nextTrivia(){if(qi===questions.length-1){qi=0;ts=0;document.getElementById('triviaScore').textContent=0}else qi++;renderTrivia()}
+renderTrivia();
+const missions=[['The color detective','Find three things around you that share a color but have completely different purposes.'],['The tiny story','Invent a two-sentence backstory for the nearest ordinary object.'],['Memory snapshot','Look around for 20 seconds, look away, and name ten things you remember.'],['Sound safari','Notice five different everyday sounds without using headphones.'],['Word collector','Find five interesting words in a book, sign, or article and make a sentence with them.'],['Design remix','Sketch a new logo for an imaginary company in under three minutes.']];
+let currentMission=0;
+function newMission(){currentMission=(currentMission+1)%missions.length;document.getElementById('missionTitle').textContent=missions[currentMission][0];document.getElementById('missionText').textContent=missions[currentMission][1];document.getElementById('missionStatus').textContent='New mission selected. Ready when you are.'}
+function completeMission(){if(missionDone){document.getElementById('missionStatus').textContent='You already claimed points for a mission this run. Nice work!';return}missionDone=true;addPoints(10);document.getElementById('missionStatus').textContent='Mission marked complete. +10 Odd Points. Well played!'}
+const factData=[['🐙','Octopuses have three hearts.','Two pump blood to the gills, and one pumps it to the rest of the body.'],['🌌','Space is very quiet.','Sound needs a medium such as air or water to travel, and space is mostly a vacuum.'],['🦩','Flamingos are not born pink.','Their color comes from pigments in the food they eat.'],['🍯','Honey can last a very long time.','Its low water content and acidity help make it resistant to spoilage when stored properly.'],['🌳','Trees can communicate chemically.','Plants can release airborne chemicals in response to insects and other stresses.'],['🛰️','A day on Venus is longer than its year.','Venus rotates very slowly compared with the time it takes to orbit the Sun.']];
+document.getElementById('facts').innerHTML=factData.map((f,i)=>`<button class="tile" style="text-align:left;color:var(--ink);cursor:pointer" onclick="revealFact(${i},this)"><div class="emoji">${f[0]}</div><h3>${f[1]}</h3><p class="facttext">Tap to reveal the detail.</p><div class="mini">REVEAL FACT +1 →</div></button>`).join('');
+function revealFact(i,el){let p=el.querySelector('.facttext');if(p.dataset.open)return;p.textContent=factData[i][2];p.dataset.open='1';addPoints(1);el.querySelector('.mini').textContent='FACT UNLOCKED'}
+function resetAll(){pts=0;visits=1;seen=new Set(['top']);doneMystery=false;missionDone=false;ts=0;qi=0;document.getElementById('triviaScore').textContent=0;document.getElementById('missionStatus').textContent='Mission status: waiting for you.';document.querySelectorAll('.facttext').forEach(p=>{p.textContent='Tap to reveal the detail.';delete p.dataset.open});document.querySelectorAll('#facts .mini').forEach(b=>b.textContent='REVEAL FACT +1 →');renderTrivia();update();window.scrollTo({top:0,behavior:'smooth'})}
+update();
+</script>
+</body></html>
