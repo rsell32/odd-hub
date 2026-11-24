@@ -183,73 +183,7 @@ h1{font-size:clamp(3.2rem,7vw,5.7rem);line-height:.96;letter-spacing:-.07em;marg
 </div>
  <div class="panel"><h3>🧩 Memory Match</h3><p class="muted">Find all matching pairs. Tap two cards at a time.</p><div class="gamebox"><button class="play" onclick="startMemory()">Start / restart</button><div class="memory" id="memory"></div><div class="result" id="memoryResult"></div></div></div></div>
 
-const scrambleWords = ["PLANET", "MYSTERY", "PUZZLE", "GALAXY", "ROCKET", "SHADOW", "ODDITY"];
-let currentScramble = "";
 
-function startScramble() {
-  currentScramble = scrambleWords[Math.floor(Math.random() * scrambleWords.length)];
-  let mixed = currentScramble.split("");
-  do {
-    mixed.sort(() => Math.random() - 0.5);
-  } while (mixed.join("") === currentScramble && currentScramble.length > 1);
-
-  document.getElementById("scrambleWord").textContent = mixed.join(" ");
-  document.getElementById("scrambleGuess").value = "";
-  document.getElementById("scrambleResult").textContent = "";
-}
-
-function checkScramble() {
-  const guess = document.getElementById("scrambleGuess").value.trim().toUpperCase();
-  document.getElementById("scrambleResult").textContent =
-    guess === currentScramble ? "Correct! Nice work!" : "Not quite. Try again!";
-}
-
-const oddRounds = [
-  { q: "Which one is not a planet?", a: ["Mars", "Venus", "Moon", "Jupiter"], correct: "Moon" },
-  { q: "Which one is not a mammal?", a: ["Dog", "Whale", "Eagle", "Cat"], correct: "Eagle" },
-  { q: "Which one is not a color?", a: ["Blue", "Green", "Seven", "Red"], correct: "Seven" },
-  { q: "Which one is not a season?", a: ["Winter", "Summer", "Tuesday", "Spring"], correct: "Tuesday" }
-];
-
-function startOdd() {
-  const round = oddRounds[Math.floor(Math.random() * oddRounds.length)];
-  document.getElementById("oddQuestion").textContent = round.q;
-  document.getElementById("oddChoices").innerHTML = round.a.map(item =>
-    `<button class="play" onclick="checkOdd('${item}','${round.correct}')">${item}</button>`
-  ).join(" ");
-  document.getElementById("oddResult").textContent = "";
-}
-
-function checkOdd(choice, correct) {
-  document.getElementById("oddResult").textContent =
-    choice === correct ? "Correct! You found it!" : "Not quite. Try again!";
-}
-
-let higherCurrent = 0;
-let higherScoreValue = 0;
-
-function startHigherLower() {
-  higherCurrent = Math.floor(Math.random() * 20) + 1;
-  higherScoreValue = 0;
-  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
-  document.getElementById("higherScore").textContent = "Score: 0";
-  document.getElementById("higherResult").textContent = "";
-}
-
-function makeHigherGuess(direction) {
-  const next = Math.floor(Math.random() * 20) + 1;
-  const correct = direction === "higher" ? next > higherCurrent : next < higherCurrent;
-  document.getElementById("higherResult").textContent =
-    next + " — " + (correct ? "Correct!" : "Not quite!");
-  if (correct) higherScoreValue++;
-  else higherScoreValue = 0;
-  higherCurrent = next;
-  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
-  document.getElementById("higherScore").textContent = "Score: " + higherScoreValue;
-}
-
-function guessHigher() { makeHigherGuess("higher"); }
-function guessLower() { makeHigherGuess("lower"); }
 </section>
 
 <section class="section page-hidden" id="mystery"><div class="page-heading"><div class="eyebrow">Case file 001 · Fictional mystery</div><h2>The midnight transmission.</h2><p class="muted">A message was intercepted at 00:03. The sender left a short code and one clue.</p></div><div class="panel"><h3>📡 Decode the message</h3><p class="muted">Every letter has moved one step forward. Move each letter back one step to reveal the two-word message.</p><div class="gamebox"><div style="font-size:1.5rem;letter-spacing:5px;font-weight:900;color:var(--cyan)">UIF EPPS</div><input id="answer" placeholder="Your decoded message"><button class="play" onclick="checkMystery()">Submit answer</button><div class="result" id="mysteryResult"></div></div></div></section>
@@ -328,6 +262,74 @@ const gameSearch = document.getElementById('gameSearch');
 
 if (gameSearch) {
   gameSearch.addEventListener('input', applyGameFilters);
-}</script>
+}
+const scrambleWords = ["PLANET", "MYSTERY", "PUZZLE", "GALAXY", "ROCKET", "SHADOW", "ODDITY"];
+let currentScramble = "";
+
+function startScramble() {
+  currentScramble = scrambleWords[Math.floor(Math.random() * scrambleWords.length)];
+  let mixed = currentScramble.split("");
+  do {
+    mixed.sort(() => Math.random() - 0.5);
+  } while (mixed.join("") === currentScramble && currentScramble.length > 1);
+
+  document.getElementById("scrambleWord").textContent = mixed.join(" ");
+  document.getElementById("scrambleGuess").value = "";
+  document.getElementById("scrambleResult").textContent = "";
+}
+
+function checkScramble() {
+  const guess = document.getElementById("scrambleGuess").value.trim().toUpperCase();
+  document.getElementById("scrambleResult").textContent =
+    guess === currentScramble ? "Correct! Nice work!" : "Not quite. Try again!";
+}
+
+const oddRounds = [
+  { q: "Which one is not a planet?", a: ["Mars", "Venus", "Moon", "Jupiter"], correct: "Moon" },
+  { q: "Which one is not a mammal?", a: ["Dog", "Whale", "Eagle", "Cat"], correct: "Eagle" },
+  { q: "Which one is not a color?", a: ["Blue", "Green", "Seven", "Red"], correct: "Seven" },
+  { q: "Which one is not a season?", a: ["Winter", "Summer", "Tuesday", "Spring"], correct: "Tuesday" }
+];
+
+function startOdd() {
+  const round = oddRounds[Math.floor(Math.random() * oddRounds.length)];
+  document.getElementById("oddQuestion").textContent = round.q;
+  document.getElementById("oddChoices").innerHTML = round.a.map(item =>
+    `<button class="play" onclick="checkOdd('${item}','${round.correct}')">${item}</button>`
+  ).join(" ");
+  document.getElementById("oddResult").textContent = "";
+}
+
+function checkOdd(choice, correct) {
+  document.getElementById("oddResult").textContent =
+    choice === correct ? "Correct! You found it!" : "Not quite. Try again!";
+}
+
+let higherCurrent = 0;
+let higherScoreValue = 0;
+
+function startHigherLower() {
+  higherCurrent = Math.floor(Math.random() * 20) + 1;
+  higherScoreValue = 0;
+  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
+  document.getElementById("higherScore").textContent = "Score: 0";
+  document.getElementById("higherResult").textContent = "";
+}
+
+function makeHigherGuess(direction) {
+  const next = Math.floor(Math.random() * 20) + 1;
+  const correct = direction === "higher" ? next > higherCurrent : next < higherCurrent;
+  document.getElementById("higherResult").textContent =
+    next + " — " + (correct ? "Correct!" : "Not quite!");
+  if (correct) higherScoreValue++;
+  else higherScoreValue = 0;
+  higherCurrent = next;
+  document.getElementById("higherNumber").textContent = "Current number: " + higherCurrent;
+  document.getElementById("higherScore").textContent = "Score: " + higherScoreValue;
+}
+
+function guessHigher() { makeHigherGuess("higher"); }
+function guessLower() { makeHigherGuess("lower"); }
+</script>
 </body>
 </html>
