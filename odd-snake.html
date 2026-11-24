@@ -93,6 +93,10 @@ let snake,food,direction,nextDirection,score,best,level;
 let running=false,paused=false,gameOver=false,timer=null;
 let touchStart=null;
 
+let previousSnake=[];
+let lastMove=0;
+let moveInterval=145;
+let animationFrame=null;
 best=Number(localStorage.getItem("oddSnakeBest")||0);
 bestEl.textContent=best;
 
