@@ -112,33 +112,134 @@ function placeFood(){
   }while(snake.some(part=>part.x===food.x&&part.y===food.y));
 }
 
+
 function draw(){
+  ctx.clearRect(0,0,480,480);
+
+  // Dark futuristic arena
   ctx.fillStyle="#090d18";
   ctx.fillRect(0,0,480,480);
 
+  // Subtle arena grid
   ctx.strokeStyle="#171b30";
   ctx.lineWidth=1;
+
   for(let i=0;i<=cells;i++){
-    ctx.beginPath();ctx.moveTo(i*size,0);ctx.lineTo(i*size,480);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(0,i*size);ctx.lineTo(480,i*size);ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(i*size,0);
+    ctx.lineTo(i*size,480);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0,i*size);
+    ctx.lineTo(480,i*size);
+    ctx.stroke();
   }
 
-  ctx.save();
-  ctx.shadowBlur=18;ctx.shadowColor="#32e8ff";
-  ctx.fillStyle="#32e8ff";
-  ctx.beginPath();
-  ctx.arc(food.x*size+12,food.y*size+12,8,0,Math.PI*2);
-  ctx.fill();ctx.restore();
+  // Glowing energy orb
+  const fx=food.x*size+12;
+  const fy=food.y*size+12;
 
-  snake.forEach((part,i)=>{
+  ctx.save();
+  ctx.shadowBlur=25;
+  ctx.shadowColor="#d34cff";
+
+  const orb=ctx.createRadialGradient(fx-3,fy-3,1,fx,fy,12);
+  orb.addColorStop(0,"#ffffff");
+  orb.addColorStop(0.3,"#d34cff");
+  orb.addColorStop(1,"#791bff");
+
+  ctx.fillStyle=orb;
+  ctx.beginPath();
+  ctx.arc(fx,fy,9,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+
+  // Smooth connected snake body
+  if(snake.length>1){
     ctx.save();
-    ctx.shadowBlur=i===0?20:8;
-    ctx.shadowColor=i===0?"#d34cff":"#27dfff";
-    ctx.fillStyle=i===0?"#d34cff":"#27dfff";
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+    ctx.lineWidth=18;
+    ctx.shadowBlur=17;
+    ctx.shadowColor="#25dfff";
+
+    const bodyGradient=ctx.createLinearGradient(0,0,480,480);
+    bodyGradient.addColorStop(0,"#d34cff");
+    bodyGradient.addColorStop(0.5,"#6d6bff");
+    bodyGradient.addColorStop(1,"#18eaff");
+
+    ctx.strokeStyle=bodyGradient;
     ctx.beginPath();
-    ctx.roundRect(part.x*size+2,part.y*size+2,20,20,6);
-    ctx.fill();ctx.restore();
-  });
+
+    ctx.moveTo(
+      snake[0].x*size+12,
+      snake[0].y*size+12
+    );
+
+    for(let i=1;i<snake.length;i++){
+      ctx.lineTo(
+        snake[i].x*size+12,
+        snake[i].y*size+12
+      );
+    }
+
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Snake head
+  const hx=snake[0].x*size+12;
+  const hy=snake[0].y*size+12;
+
+  ctx.save();
+  ctx.shadowBlur=23;
+  ctx.shadowColor="#d34cff";
+
+  const headGradient=ctx.createRadialGradient(
+    hx-4,hy-5,2,hx,hy,15
+  );
+
+  headGradient.addColorStop(0,"#ffffff");
+  headGradient.addColorStop(0.25,"#e18cff");
+  headGradient.addColorStop(1,"#a02cff");
+
+  ctx.fillStyle=headGradient;
+  ctx.beginPath();
+  ctx.arc(hx,hy,11,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+
+  // Head direction and eyes
+  const dx=direction.x;
+  const dy=direction.y;
+  const px=-dy;
+  const py=dx;
+
+  for(let side of [-1,1]){
+    const ex=hx+dx*5+px*side*5;
+    const ey=hy+dy*5+py*side*5;
+
+    ctx.fillStyle="#ffffff";
+    ctx.beginPath();
+    ctx.arc(ex,ey,3.5,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle="#101020";
+    ctx.beginPath();
+    ctx.arc(ex+dx*1.2,ey+dy*1.2,1.8,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  // Small glowing snout
+  ctx.fillStyle="#28eaff";
+  ctx.shadowBlur=10;
+  ctx.shadowColor="#28eaff";
+  ctx.beginPath();
+  ctx.arc(hx+dx*9,hy+dy*9,2,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
 }
 
 function tick(){
