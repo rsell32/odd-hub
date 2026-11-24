@@ -116,101 +116,88 @@ function placeFood(){
 function draw(){
   ctx.clearRect(0,0,480,480);
 
-  // Dark futuristic arena
-  ctx.fillStyle="#090d18";
+  // Clean, dark forest floor
+  ctx.fillStyle="#101b16";
   ctx.fillRect(0,0,480,480);
 
-  // Subtle arena grid
-  ctx.strokeStyle="#171b30";
-  ctx.lineWidth=1;
+  // Subtle arena border
+  ctx.strokeStyle="#304b38";
+  ctx.lineWidth=3;
+  ctx.strokeRect(2,2,476,476);
 
-  for(let i=0;i<=cells;i++){
-    ctx.beginPath();
-    ctx.moveTo(i*size,0);
-    ctx.lineTo(i*size,480);
-    ctx.stroke();
+  // Energy collectible
+  const fx=food.x*size+size/2;
+  const fy=food.y*size+size/2;
 
-    ctx.beginPath();
-    ctx.moveTo(0,i*size);
-    ctx.lineTo(480,i*size);
-    ctx.stroke();
-  }
-
-  // Glowing energy orb
-  const fx=food.x*size+12;
-  const fy=food.y*size+12;
-
-  ctx.save();
-  ctx.shadowBlur=25;
-  ctx.shadowColor="#d34cff";
-
-  const orb=ctx.createRadialGradient(fx-3,fy-3,1,fx,fy,12);
-  orb.addColorStop(0,"#ffffff");
-  orb.addColorStop(0.3,"#d34cff");
-  orb.addColorStop(1,"#791bff");
-
-  ctx.fillStyle=orb;
+  ctx.fillStyle="#b9ff70";
   ctx.beginPath();
-  ctx.arc(fx,fy,9,0,Math.PI*2);
+  ctx.moveTo(fx,fy-9);
+  ctx.lineTo(fx+7,fy);
+  ctx.lineTo(fx,fy+9);
+  ctx.lineTo(fx-7,fy);
+  ctx.closePath();
   ctx.fill();
-  ctx.restore();
 
-  // Smooth connected snake body
+  // Snake body
   if(snake.length>1){
-    ctx.save();
     ctx.lineCap="round";
     ctx.lineJoin="round";
-    ctx.lineWidth=18;
-    ctx.shadowBlur=17;
-    ctx.shadowColor="#25dfff";
 
-    const bodyGradient=ctx.createLinearGradient(0,0,480,480);
-    bodyGradient.addColorStop(0,"#d34cff");
-    bodyGradient.addColorStop(0.5,"#6d6bff");
-    bodyGradient.addColorStop(1,"#18eaff");
-
-    ctx.strokeStyle=bodyGradient;
     ctx.beginPath();
-
     ctx.moveTo(
-      snake[0].x*size+12,
-      snake[0].y*size+12
+      snake[0].x*size+size/2,
+      snake[0].y*size+size/2
     );
 
     for(let i=1;i<snake.length;i++){
       ctx.lineTo(
-        snake[i].x*size+12,
-        snake[i].y*size+12
+        snake[i].x*size+size/2,
+        snake[i].y*size+size/2
       );
     }
 
+    // Dark outline
+    ctx.strokeStyle="#172d1c";
+    ctx.lineWidth=size*0.85;
     ctx.stroke();
-    ctx.restore();
+
+    // Main green body
+    ctx.strokeStyle="#4b9148";
+    ctx.lineWidth=size*0.68;
+    ctx.stroke();
+
+    // Lighter belly stripe
+    ctx.strokeStyle="#a5bd72";
+    ctx.lineWidth=size*0.25;
+    ctx.stroke();
+
+    // Natural scale details
+    for(let i=2;i<snake.length;i+=2){
+      const x=snake[i].x*size+size/2;
+      const y=snake[i].y*size+size/2;
+
+      ctx.fillStyle="#315f32";
+      ctx.beginPath();
+      ctx.ellipse(x,y,3,2,0,0,Math.PI*2);
+      ctx.fill();
+    }
   }
 
   // Snake head
-  const hx=snake[0].x*size+12;
-  const hy=snake[0].y*size+12;
+  const hx=snake[0].x*size+size/2;
+  const hy=snake[0].y*size+size/2;
 
-  ctx.save();
-  ctx.shadowBlur=23;
-  ctx.shadowColor="#d34cff";
-
-  const headGradient=ctx.createRadialGradient(
-    hx-4,hy-5,2,hx,hy,15
-  );
-
-  headGradient.addColorStop(0,"#ffffff");
-  headGradient.addColorStop(0.25,"#e18cff");
-  headGradient.addColorStop(1,"#a02cff");
-
-  ctx.fillStyle=headGradient;
+  ctx.fillStyle="#315f32";
   ctx.beginPath();
-  ctx.arc(hx,hy,11,0,Math.PI*2);
+  ctx.ellipse(hx,hy,size*0.52,size*0.46,0,0,Math.PI*2);
   ctx.fill();
-  ctx.restore();
 
-  // Head direction and eyes
+  ctx.fillStyle="#75aa50";
+  ctx.beginPath();
+  ctx.ellipse(hx,hy+2,size*0.37,size*0.3,0,0,Math.PI*2);
+  ctx.fill();
+
+  // Eyes positioned according to direction
   const dx=direction.x;
   const dy=direction.y;
   const px=-dy;
@@ -220,28 +207,17 @@ function draw(){
     const ex=hx+dx*5+px*side*5;
     const ey=hy+dy*5+py*side*5;
 
-    ctx.fillStyle="#ffffff";
+    ctx.fillStyle="#e8e5b5";
     ctx.beginPath();
     ctx.arc(ex,ey,3.5,0,Math.PI*2);
     ctx.fill();
 
-    ctx.fillStyle="#101020";
+    ctx.fillStyle="#171b12";
     ctx.beginPath();
-    ctx.arc(ex+dx*1.2,ey+dy*1.2,1.8,0,Math.PI*2);
+    ctx.arc(ex+dx,ey+dy,1.5,0,Math.PI*2);
     ctx.fill();
   }
-
-  // Small glowing snout
-  ctx.fillStyle="#28eaff";
-  ctx.shadowBlur=10;
-  ctx.shadowColor="#28eaff";
-  ctx.beginPath();
-  ctx.arc(hx+dx*9,hy+dy*9,2,0,Math.PI*2);
-  ctx.fill();
-
-  ctx.restore();
 }
-
 function tick(){
   if(!running||paused)return;
   direction=nextDirection;
