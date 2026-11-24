@@ -604,6 +604,237 @@ a:focus-visible {
     transition-duration: .01ms !important;
   }
 }
+
+/* ==================================
+   ODD//HUB — CINEMATIC PORTAL ENTRANCE
+================================== */
+
+:root {
+  --void: #050510;
+  --purple: #8b5cf6;
+  --blue: #38bdf8;
+  --pink: #ec4899;
+  --white: #f5f3ff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(93, 44, 180, .24), transparent 42%),
+    radial-gradient(ellipse at 85% 55%, rgba(27, 104, 190, .12), transparent 38%),
+    var(--void);
+  color: var(--white);
+}
+
+.top {
+  background: rgba(5, 5, 16, .78);
+  border-bottom: 1px solid rgba(139, 92, 246, .2);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  letter-spacing: 3px;
+  font-weight: 950;
+}
+
+.brand span {
+  color: var(--purple);
+}
+
+.links a {
+  transition: color .2s ease, background .2s ease;
+}
+
+.links a:hover,
+.links a.active {
+  color: white;
+  background: rgba(139, 92, 246, .18);
+}
+
+/* Main cinematic entrance */
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 690px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  align-items: center;
+  gap: 35px;
+  padding: 75px 6%;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, .25);
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse at 72% 50%, rgba(111, 45, 220, .28), transparent 38%),
+    linear-gradient(120deg, rgba(8, 8, 25, .98), rgba(17, 10, 43, .82));
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .4);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .3;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, .12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, .12) 1px, transparent 1px);
+  background-size: 45px 45px;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.hero h1 {
+  max-width: 700px;
+  font-size: clamp(3.5rem, 7vw, 6.8rem);
+  line-height: .92;
+  letter-spacing: -5px;
+  font-weight: 1000;
+  text-shadow: 0 0 35px rgba(139, 92, 246, .25);
+}
+
+.hero h1 span {
+  color: #a78bfa;
+}
+
+.hero .lead {
+  max-width: 540px;
+  color: #c4bddb;
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.heroart {
+  min-height: 440px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, .28);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle, rgba(139, 92, 246, .2), transparent 60%),
+    rgba(4, 4, 18, .45);
+}
+
+.orb {
+  width: min(330px, 72vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 50%, #070713 0 35%, transparent 36%),
+    conic-gradient(from 0deg, #38bdf8, #8b5cf6, #ec4899, #38bdf8);
+  filter: drop-shadow(0 0 24px rgba(139, 92, 246, .65));
+  animation: portalSpin 18s linear infinite;
+}
+
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #100b27 0 48%, #070713 70%);
+  border: 2px solid rgba(255, 255, 255, .2);
+  box-shadow: inset 0 0 35px #8b5cf6, 0 0 35px #38bdf8;
+}
+
+.orb::after {
+  content: "";
+  position: absolute;
+  inset: 25px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, .55);
+  animation: portalSpin 12s linear infinite reverse;
+}
+
+@keyframes portalSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Entrance buttons */
+.hero .actions a,
+.hero .actions button {
+  border-radius: 999px;
+  padding: 15px 25px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.hero .actions a:first-child,
+.hero .actions button:first-child {
+  background: linear-gradient(100deg, #7c3aed, #2563eb);
+  color: white;
+  border: 0;
+  box-shadow: 0 0 30px rgba(124, 58, 237, .4);
+}
+
+.hero .actions a:hover,
+.hero .actions button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 35px rgba(56, 189, 248, .3);
+}
+
+/* Stats */
+.stats {
+  margin-top: 24px;
+  gap: 15px;
+}
+
+.stats > * {
+  background: rgba(15, 12, 35, .8);
+  border: 1px solid rgba(139, 92, 246, .2);
+  border-radius: 18px;
+}
+
+/* Explore cards */
+.tile,
+.panel,
+.gamebox {
+  background: linear-gradient(145deg, rgba(22, 17, 48, .95), rgba(8, 10, 27, .95));
+  border: 1px solid rgba(139, 92, 246, .2);
+  border-radius: 20px;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.tile:hover,
+.gamebox:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, .65);
+  box-shadow: 0 15px 45px rgba(56, 189, 248, .1);
+}
+
+/* Mobile layout */
+@media (max-width: 850px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 45px 25px;
+  }
+
+  .hero h1 {
+    letter-spacing: -2px;
+  }
+
+  .heroart {
+    min-height: 330px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .orb::after {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
 </style>
 </head>
 <body>
