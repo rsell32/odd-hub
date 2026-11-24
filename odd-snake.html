@@ -116,20 +116,45 @@ function placeFood(){
 function draw(){
   ctx.clearRect(0,0,480,480);
 
-  // Clean, dark forest floor
+  // Dark forest arena
   ctx.fillStyle="#101b16";
   ctx.fillRect(0,0,480,480);
 
-  // Subtle arena border
-  ctx.strokeStyle="#304b38";
-  ctx.lineWidth=3;
-  ctx.strokeRect(2,2,476,476);
+  // Restored subtle grid
+  ctx.strokeStyle="#263b2c";
+  ctx.lineWidth=1;
 
-  // Energy collectible
+  for(let i=0;i<=cells;i++){
+    ctx.beginPath();
+    ctx.moveTo(i*size,0);
+    ctx.lineTo(i*size,480);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0,i*size);
+    ctx.lineTo(480,i*size);
+    ctx.stroke();
+  }
+
+  // Smooth movement interpolation
+  const progress=previousSnake.length
+    ?Math.min(1,(performance.now()-lastMove)/moveInterval)
+    :1;
+
+  const points=snake.map((part,i)=>{
+    const old=previousSnake[i]||part;
+
+    return {
+      x:(old.x+(part.x-old.x)*progress)*size+size/2,
+      y:(old.y+(part.y-old.y)*progress)*size+size/2
+    };
+  });
+
+  // Energy crystal
   const fx=food.x*size+size/2;
   const fy=food.y*size+size/2;
 
-  ctx.fillStyle="#b9ff70";
+  ctx.fillStyle="#c5ff79";
   ctx.beginPath();
   ctx.moveTo(fx,fy-9);
   ctx.lineTo(fx+7,fy);
@@ -139,132 +164,155 @@ function draw(){
   ctx.fill();
 
   // Snake body
-  if(snake.length>1){
+  if(points.length>1){
     ctx.lineCap="round";
     ctx.lineJoin="round";
 
     ctx.beginPath();
-    ctx.moveTo(
-      snake[0].x*size+size/2,
-      snake[0].y*size+size/2
-    );
+    ctx.moveTo(points[0].x,points[0].y);
 
-    for(let i=1;i<snake.length;i++){
-      ctx.lineTo(
-        snake[i].x*size+size/2,
-        snake[i].y*size+size/2
-      );
+    for(let i=1;i<points.length;i++){
+      ctx.lineTo(points[i].x,points[i].y);
     }
 
-    // Dark outline
     ctx.strokeStyle="#172d1c";
-    ctx.lineWidth=size*0.85;
+    ctx.lineWidth=20;
     ctx.stroke();
 
-    // Main green body
     ctx.strokeStyle="#4b9148";
-    ctx.lineWidth=size*0.68;
+    ctx.lineWidth=16;
     ctx.stroke();
 
-    // Lighter belly stripe
     ctx.strokeStyle="#a5bd72";
-    ctx.lineWidth=size*0.25;
+    ctx.lineWidth=5;
     ctx.stroke();
 
-    // Natural scale details
-    for(let i=2;i<snake.length;i+=2){
-      const x=snake[i].x*size+size/2;
-      const y=snake[i].y*size+size/2;
-
+    // Scale details
+    for(let i=2;i<points.length;i+=2){
       ctx.fillStyle="#315f32";
       ctx.beginPath();
-      ctx.ellipse(x,y,3,2,0,0,Math.PI*2);
+      ctx.ellipse(points[i].x,points[i].y,3,2,0,0,Math.PI*2);
       ctx.fill();
     }
   }
 
-  // Snake head
-  const hx=snake[0].x*size+size/2;
-  const hy=snake[0].y*size+size/2;
+  // Tapered snake head
+  const head=points[0];
+  const dx=direction.x;
+  const dy=direction.y;
+  const angle=Math.atan2(dy,dx);
+
+  ctx.save();
+  ctx.translate(head.x,head.y);
+  ctx.rotate(angle);
 
   ctx.fillStyle="#315f32";
   ctx.beginPath();
-  ctx.ellipse(hx,hy,size*0.52,size*0.46,0,0,Math.PI*2);
+  ctx.moveTo(12,0);
+  ctx.quadraticCurveTo(9,-10,-3,-10);
+  ctx.quadraticCurveTo(-13,-9,-12,0);
+  ctx.quadraticCurveTo(-13,9,-3,10);
+  ctx.quadraticCurveTo(9,10,12,0);
   ctx.fill();
 
   ctx.fillStyle="#75aa50";
   ctx.beginPath();
-  ctx.ellipse(hx,hy+2,size*0.37,size*0.3,0,0,Math.PI*2);
+  ctx.ellipse(2,0,8,6,0,0,Math.PI*2);
   ctx.fill();
 
-  // Eyes positioned according to direction
-  const dx=direction.x;
-  const dy=direction.y;
-  const px=-dy;
-  const py=dx;
-
+  // Eyes
   for(let side of [-1,1]){
-    const ex=hx+dx*5+px*side*5;
-    const ey=hy+dy*5+py*side*5;
-
-    ctx.fillStyle="#e8e5b5";
+    ctx.fillStyle="#eee9c5";
     ctx.beginPath();
-    ctx.arc(ex,ey,3.5,0,Math.PI*2);
+    ctx.arc(1,side*6,3,0,Math.PI*2);
     ctx.fill();
 
     ctx.fillStyle="#171b12";
     ctx.beginPath();
-    ctx.arc(ex+dx,ey+dy,1.5,0,Math.PI*2);
+    ctx.arc(2,side*6,1.5,0,Math.PI*2);
     ctx.fill();
   }
-}
-function tick(){
-  if(!running||paused)return;
-  direction=nextDirection;
-  const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y};
-  const ate=head.x===food.x&&head.y===food.y;
-  const body=ate?snake:snake.slice(0,-1);
 
-  if(head.x<0||head.x>=cells||head.y<0||head.y>=cells||
-     body.some(part=>part.x===head.x&&part.y===head.y)){
-    endGame();return;
+  ctx.restore();
+}
+function tick(timestamp){
+  if(!running||paused)return;
+
+  if(!lastMove)lastMove=timestamp;
+
+  if(timestamp-lastMove>=moveInterval){
+    lastMove=timestamp;
+
+    direction=nextDirection;
+
+    const head={
+      x:snake[0].x+direction.x,
+      y:snake[0].y+direction.y
+    };
+
+    const ate=head.x===food.x&&head.y===food.y;
+    const body=ate?snake:snake.slice(0,-1);
+
+    if(head.x<0||head.x>=cells||head.y<0||head.y>=cells||
+       body.some(part=>part.x===head.x&&part.y===head.y)){
+      endGame();
+      return;
+    }
+
+    previousSnake=snake.map(part=>({...part}));
+
+    snake.unshift(head);
+
+    if(ate){
+      score+=10;
+      scoreEl.textContent=score;
+
+      level=Math.floor(score/50)+1;
+      levelEl.textContent=level;
+
+      if(score>best){
+        best=score;
+        localStorage.setItem("oddSnakeBest",best);
+        bestEl.textContent=best;
+      }
+
+      placeFood();
+    }else{
+      snake.pop();
+    }
+
+    moveInterval=Math.max(85,145-(level-1)*8);
   }
 
-  snake.unshift(head);
-  if(ate){
-    score+=10;
-    scoreEl.textContent=score;
-    level=Math.floor(score/50)+1;
-    levelEl.textContent=level;
-    if(score>best){
-      best=score;
-      localStorage.setItem("oddSnakeBest",best);
-      bestEl.textContent=best;
-    }
-    placeFood();
-  }else snake.pop();
-
   draw();
-  clearTimeout(timer);
-  timer=setTimeout(tick,Math.max(65,145-(level-1)*10));
+  animationFrame=requestAnimationFrame(tick);
 }
-
 function startGame(){
   clearTimeout(timer);
-  reset();
-  running=true;paused=false;gameOver=false;
-  overlay.style.display="none";
-  tick();
-}
+  cancelAnimationFrame(animationFrame);
 
+  reset();
+
+  running=true;
+  paused=false;
+  gameOver=false;
+  lastMove=0;
+
+  overlay.style.display="none";
+
+  animationFrame=requestAnimationFrame(tick);
+}
 function endGame(){
-  running=false;gameOver=true;
+  running=false;
+  gameOver=true;
+
+  cancelAnimationFrame(animationFrame);
+
   message.textContent="GAME OVER";
   description.textContent="You scored "+score+" points. Ready for another round?";
   startBtn.textContent="PLAY AGAIN";
   overlay.style.display="flex";
 }
-
 function setDirection(dir){
   const dirs={
     up:{x:0,y:-1},down:{x:0,y:1},
@@ -312,20 +360,24 @@ canvas.addEventListener("touchend",e=>{
 
 function togglePause(){
   if(!running)return;
+
   paused=!paused;
+
   document.getElementById("pause").textContent=paused?"RESUME":"PAUSE";
+
   if(paused){
-    clearTimeout(timer);
+    cancelAnimationFrame(animationFrame);
+
     message.textContent="PAUSED";
     description.textContent="Take a break. Your score is "+score+".";
     startBtn.textContent="RESUME";
     overlay.style.display="flex";
   }else{
     overlay.style.display="none";
-    tick();
+    lastMove=0;
+    animationFrame=requestAnimationFrame(tick);
   }
 }
-
 startBtn.addEventListener("click",()=>{
   if(paused)togglePause();
   else startGame();
